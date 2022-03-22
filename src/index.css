@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'OpenSans';
+        src: local('OpenSans'), url('./fonts/OpenSans.ttf') format('truetype');
+    }
+    
+    @font-face {
+        font-family: 'Lato';
+        src: local('Lato'), url('./fonts/Lato.ttf') format('truetype');
+    }
+
+    html {
+        font-family: "OpenSans"
+    }
+}
