@@ -25,6 +25,7 @@ jobs:
       - name: Add remote origin
         # if: github.ref == 'refs/heads/develop' && job.status == 'success'
         run: |
+          git init
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/hotelist-fe-dev.git
       - name: Deploy to Heroku
         run: |
