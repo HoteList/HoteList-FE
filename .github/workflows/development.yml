@@ -28,10 +28,10 @@ jobs:
           git init
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/hotelist-fe-dev.git
       - name: Deploy to Heroku
-        run: |
-          git push -f heroku develop:main
-        # uses: akhileshns/heroku-deploy@v3.12.12
-        # with:
-        #   heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        #   heroku_app_name: 'hotelist-fe-dev'
-        #   heroku_email: 'wahyu172845@gmail.com'
+        # run: |
+        #   git push -f heroku develop:main
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: 'hotelist-fe-dev'
+          heroku_email: 'wahyu172845@gmail.com'
