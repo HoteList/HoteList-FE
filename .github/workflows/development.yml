@@ -6,9 +6,8 @@ on:
       - develop
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Development Code
         uses: actions/checkout@v2
@@ -18,9 +17,19 @@ jobs:
           node-version: 17.x
       - run: npm install
       - run: npm run build --if-present
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add remote origin
+        if: github.ref == 'refs/heads/develop' && job.status == 'success'
+        run: |
+          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/hotelist-fe-dev.git
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: 'hotelist-fe-dev'
-          heroku_email: 'wahyu172845@gmail.com' 
+        run: |
+          git push heroku develop:main
+        # uses: akhileshns/heroku-deploy@v3.12.12
+        # with:
+        #   heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        #   heroku_app_name: 'hotelist-fe-dev'
+        #   heroku_email: 'wahyu172845@gmail.com'
