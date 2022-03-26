@@ -33,7 +33,16 @@ function Login() {
             password: inputData.password
         }).then((resp) => {
             if (resp.data.user.role === 'admin') {
-                dispatch(saveAdmin(resp.data.user));
+                dispatch(saveAdmin({
+                    full_name: resp.data.user.full_name,
+                    username: resp.data.user.username,
+                    email: resp.data.user.email,
+                    lat: resp.data.user.lat,
+                    lot: resp.data.user.lot,
+                    id: resp.data.user.id,
+                    role: resp.data.user.role,
+                    image: "",
+                }));
                 sessionStorage.setItem("token", resp.data.token);
                 setError("");
                 navigate(`/`);

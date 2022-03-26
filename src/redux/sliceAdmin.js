@@ -8,6 +8,7 @@ const initialValue = {
     lot: "",
     id: "",
     role: "",
+    image: "",
 }
 
 export const sliceAdmin = createSlice({
