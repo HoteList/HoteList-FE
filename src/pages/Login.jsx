@@ -41,7 +41,7 @@ function Login() {
                     lot: resp.data.user.lot,
                     id: resp.data.user.id,
                     role: resp.data.user.role,
-                    image: "",
+                    image: resp.data.user.image,
                 }));
                 sessionStorage.setItem("token", resp.data.token);
                 setError("");
