@@ -1,9 +1,18 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import logo from '../image/logo.png'
+import { deleteAdmin } from '../redux/sliceAdmin';
 
 function Navbar({ image, username }) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogOut = () => {
+        dispatch(deleteAdmin());
+        navigate('/login')
+    }
     return (
-        <div className="navbar shadow-sm shadow-brown-primary px-6">
+        <div className="sticky top-0 z-10 navbar shadow-sm shadow-brown-primary px-6 bg-white">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabindex="0" className="btn bg-transparent border-none hover:bg-transparent lg:hidden swap swap-rotate">
@@ -74,7 +83,6 @@ function Navbar({ image, username }) {
                                 </div>
                             </div>
                         }
-                        {/* <img src="https://api.lorem.space/image/face?hash=33791" /> */}
                     </label>
                     <ul tabindex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-content text-base-300 rounded-box w-52">
                         <li>
@@ -87,7 +95,7 @@ function Navbar({ image, username }) {
                             <a className='hover:bg-primary-focus hover:bg-opacity-40'>Settings</a>
                         </li>
                         <li>
-                            <a className='hover:bg-primary-focus hover:bg-opacity-40'>Logout</a>
+                            <a onClick={handleLogOut} className='hover:bg-primary-focus hover:bg-opacity-40'>Logout</a>
                         </li>
                     </ul>
                 </div>
