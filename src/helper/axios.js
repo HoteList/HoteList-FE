@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const Axios = axios.create({
-  withCredentials: true,
   baseURL: "https://hotelist-be.herokuapp.com/api",
   headers: {
     Accept: "application/json",
