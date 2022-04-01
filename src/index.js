@@ -8,7 +8,9 @@ import './fonts/Lato.ttf'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <div className='bg-white'>
+      <App />
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );
