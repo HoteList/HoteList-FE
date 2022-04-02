@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Chart, Navbar, UsersList } from '../components';
+import { Link } from 'react-router-dom';
+import { Chart, Navbar, SessionAlert, UsersList } from '../components';
 import HotelList from '../components/HotelList';
 import { Axios } from '../helper/axios';
 
@@ -42,20 +43,27 @@ function Home() {
     return (
         <div className='min-h-screen'>
             <Navbar image={admin.image} username={admin.username} />
-            <div className='container mx-auto px-10 mt-7 font-semibold'>
-                <h3 className='text-lg'>Overview</h3>
-                <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
+            <div className='container mx-auto px-10 py-4 font-semibold'>
+                <h3 className='text-lg mb-4'>Overview</h3>
+                <div className='grid grid-cols-1 lg:grid-cols-12 gap-6'>
                     <div className='col-span-1 lg:col-span-12'>
                         <div className='relative bg-primary-content shadow-2xl rounded-lg p-4'>
                             <Chart data={data} />
                         </div>
                     </div>
                     <div className='col-span-1 lg:col-span-6'>
-                        <div className='bg-primary-content shadow-2xl rounded-lg p-4'>
-                            <UsersList user={user} />
+                        <h3 className='text-lg mb-4'>Users</h3>
+                        <div className='bg-primary-content shadow-2xl rounded-lg p-4 pb-0'>
+                            <UsersList user={user.slice().splice(0,5)} />
+                            <div className='flex justify-end'>
+                                <Link to={`/userlist`}>
+                                    <button className='btn btn-link text-neutral-content'>View All User</button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className='col-span-1 lg:col-span-6'>
+                        <h3 className='text-lg mb-4'>Hotels</h3>
                         <div className='bg-primary-content shadow-2xl rounded-lg p-4'>
                             <HotelList hotel={hotel} />
                         </div>

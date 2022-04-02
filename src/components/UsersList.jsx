@@ -31,7 +31,10 @@ function UserList({ user }) {
                                     }
                                     <div>
                                         <div className='font-bold'>{item.username}</div>
-                                        <div className='text-sm opacity-50'>Bandung</div>
+                                        {item.lat.length !== 0 || item.lot.length !== 0 ? 
+                                            <div className='text-sm opacity-50'>{`Lat: ${item.lat}, Long: ${item.lot}`}</div>
+                                        : null
+                                        }
                                     </div>
                                 </div>
                             </td>

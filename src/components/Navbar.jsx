@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../image/logo.png'
 import { deleteAdmin } from '../redux/sliceAdmin';
 
@@ -20,7 +20,9 @@ function Navbar({ image, username }) {
                     </label>
                     <ul tabindex="0" className="menu menu-compact dropdown-content text-base-300 mt-3 p-2 shadow bg-base-content rounded-box w-52">
                         <li>
-                            <a className='hover:bg-primary-focus hover:bg-opacity-40'>Dashboard</a>
+                            <Link to={`/`}>
+                                <a className='hover:bg-primary-focus hover:bg-opacity-40'>Dashboard</a>
+                            </Link>
                         </li>
                         <li tabindex="0">
                             <a className="justify-between hover:bg-primary-focus hover:bg-opacity-40">
@@ -37,18 +39,24 @@ function Navbar({ image, username }) {
                             </ul>
                         </li>
                         <li>
-                            <a className='hover:bg-primary-focus hover:bg-opacity-40'>User</a>
+                            <Link to={`/userlist`}>
+                                <a className='hover:bg-primary-focus hover:bg-opacity-40'>User</a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
                 <div>
-                    <img src={logo} alt="Logo" className='w-36' />
+                    <Link to={`/`}>
+                        <img src={logo} alt="Logo" className='w-36' />
+                    </Link>
                 </div>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal p-0 text-base-300 font-semibold">
                     <li>
-                        <a>Dashboard</a>
+                        <Link to={`/`}>
+                            <a>Dashboard</a>
+                        </Link>
                     </li>
                     <li tabindex="0">
                         <a>
@@ -65,7 +73,9 @@ function Navbar({ image, username }) {
                         </ul>
                     </li>
                     <li>
-                        <a>User</a>
+                        <Link to={`/userlist`}>
+                            <a>User</a>
+                        </Link>
                     </li>
                 </ul>
             </div>
