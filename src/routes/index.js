@@ -1,16 +1,24 @@
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import { Home, Login } from "../pages";
+import { Home, Login, User } from "../pages";
 import ProtectingRoute from "./protectingRoute";
 import { persistor, store } from "../redux/store";
+import { SessionAlert } from "../components";
 
 const Routers = () => {
+    const session = sessionStorage.getItem('token');
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <Router>
+                    {!session ? 
+                        <SessionAlert />
+                    :
+                        null
+                    }
                     <Routes>
+                        <Route path="/login" element={<Login />} />
                         <Route
                             path="/"
                             element={
@@ -19,7 +27,14 @@ const Routers = () => {
                                 </ProtectingRoute>
                             }
                         />
-                        <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/userlist"
+                            element={
+                                <ProtectingRoute>
+                                    <User />
+                                </ProtectingRoute>
+                            }
+                        />
                     </Routes>
                 </Router>
             </PersistGate>
