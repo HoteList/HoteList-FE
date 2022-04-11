@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Chart, Navbar, SessionAlert, UsersList } from '../components';
+import { Chart, Navbar, UsersList } from '../components';
 import HotelList from '../components/HotelList';
 import { Axios } from '../helper/axios';
 
@@ -16,7 +16,7 @@ function Home() {
         })
     }
     const getHotelData = async () => {
-        await Axios.get(`/getAllHotels`).then((resp) => {
+        await Axios.get(`/hotel`).then((resp) => {
             setHotel(resp.data)
         })
     }
@@ -56,7 +56,7 @@ function Home() {
                         <div className='bg-primary-content shadow-2xl rounded-lg p-4 pb-0'>
                             <UsersList user={user.slice().splice(0,5)} />
                             <div className='flex justify-end'>
-                                <Link to={`/userlist`}>
+                                <Link to={`/listuser`}>
                                     <button className='btn btn-link text-neutral-content'>View All User</button>
                                 </Link>
                             </div>
@@ -64,8 +64,13 @@ function Home() {
                     </div>
                     <div className='col-span-1 lg:col-span-6'>
                         <h3 className='text-lg mb-4'>Hotels</h3>
-                        <div className='bg-primary-content shadow-2xl rounded-lg p-4'>
-                            <HotelList hotel={hotel} />
+                        <div className='bg-primary-content shadow-2xl rounded-lg p-4 pb-0'>
+                            <HotelList hotel={hotel.slice().splice(0,5)} />
+                            <div className='flex justify-end'>
+                                <Link to={`/listhotel`}>
+                                    <button className='btn btn-link text-neutral-content'>View All Hotel</button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

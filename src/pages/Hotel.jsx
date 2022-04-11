@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Navbar } from '../components';
-import UserList from '../components/UsersList';
+import HotelList from '../components/HotelList';
 import { Axios } from '../helper/axios';
 
-function User() {
+function Hotel() {
     const admin = useSelector((state) => state.admin.admins);
-    const [user, setUser] = useState([]);
-
-    const getUserData = async () => {
-        await Axios.get(`/user`).then((resp) => {
-            setUser(resp.data)
+    const [hotel, setHotel] = useState([]);
+    const getHotelData = async () => {
+        await Axios.get(`/hotel`).then((resp) => {
+            setHotel(resp.data)
         })
     }
 
     useEffect(() => {
-        getUserData();
+        getHotelData();
     }, [])
-
     return (
-        <div className="min-h-screen">
+        <div className='min-h-screen'>
             <Navbar image={admin.image} username={admin.username} />
             <div className='container mx-auto px-10 py-4 font-semibold'>
-                <h3 className='text-lg mb-4'>Users</h3>
-                <UserList user={user} />
+                <h3 className='text-lg mb-4'>Hotels</h3>
+                <HotelList hotel={hotel} />
             </div>
         </div>
     )
 }
 
-export default User
+export default Hotel
