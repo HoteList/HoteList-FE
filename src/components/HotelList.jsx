@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function HotelList({ hotel }) {
     return (
@@ -24,11 +25,17 @@ function HotelList({ hotel }) {
                                 </div>
                             </td>
                             <td>
-                                {item.description}
+                                {item.description.length > 255 ?
+                                    (`${item.description.substring(0,25)}...`)
+                                :
+                                    (item.description)
+                                }
                             </td>
                             <td>{item.capacity}</td>
                             <th>
-                                <button className='btn btn-ghost btn-xs'>Details</button>
+                                <Link to={`/listhotel/${item.id}`}>
+                                    <button className='btn btn-ghost btn-xs'>Details</button>
+                                </Link>
                             </th>
                         </tr>
                     ))}
