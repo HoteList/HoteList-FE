@@ -1,7 +1,7 @@
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import { AddHotel, EditHotel, Home, Hotel, HotelDetail, Login, User } from "../pages";
+import { AddHotel, AddRoomHotel, EditHotel, EditRoomHotel, Home, Hotel, HotelDetail, Login, User } from "../pages";
 import ProtectingRoute from "./protectingRoute";
 import { persistor, store } from "../redux/store";
 import { SessionAlert } from "../components";
@@ -64,6 +64,22 @@ const Routers = () => {
                             element={
                                 <ProtectingRoute>
                                     <EditHotel />
+                                </ProtectingRoute>
+                            }
+                        />
+                        <Route
+                            path="/listhotel/:id/room/add"
+                            element={
+                                <ProtectingRoute>
+                                    <AddRoomHotel />
+                                </ProtectingRoute>
+                            }
+                        />
+                        <Route
+                            path="/listhotel/:id/room/:idRoom/edit"
+                            element={
+                                <ProtectingRoute>
+                                    <EditRoomHotel />
                                 </ProtectingRoute>
                             }
                         />

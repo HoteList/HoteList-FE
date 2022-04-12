@@ -1,47 +1,42 @@
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { ImageContainer, Navbar } from '../components'
-import { Axios } from '../helper/axios';
-import Geocode from "react-geocode";
+import { ImageContainer, Navbar } from '../components';
 import { app } from '../firebase/firebase-config';
+import { Axios } from '../helper/axios';
 import imageCompression from 'browser-image-compression';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { async } from '@firebase/util';
 
-function EditHotel() {
+function EditRoomHotel() {
     const admin = useSelector((state) => state.admin.admins);
     const slug = useParams();
-    const [hotelDetail, setHotelDetail] = useState();
+    const [roomDetail, setRoomDetail] = useState();
     const [files, setFiles] = useState([]);
-    const [address, setAddress] = useState();
     const urls = [];
     const compressionOption = {
 		maxWidthOrHeight: 1080,
 		useWebWorker: true,
 	};
 
-    const getHotelDetail = () => {
-        Axios.get(`/hotel/${slug.id}`).then((resp) => {
+    const getRoomDetail = () => {
+        Axios.get(`roomDetails/${slug.idRoom}`).then((resp) => {
+            console.log(resp);
             const images = resp.data.image.split(',');
-            setHotelDetail({
+            setRoomDetail({
                 name: resp.data.name,
+                price: resp.data.price,
                 description: resp.data.description,
                 image: images,
-                lat: resp.data.lat,
-                lot: resp.data.lot,
-                capacity: resp.data.capacity,
-                id: resp.data.id
-            });
+                hotel_id: resp.data.hotel_id
+            })
             setFiles(files.concat(images.map((item) => (
                 {
                     name: "",
                     preview: item
                 }
             ))))
-            Geocode.fromLatLng(resp.data.lat, resp.data.lot).then((resp) => {
-                setAddress(resp.results[0].formatted_address);
-            })
         })
     }
 
@@ -58,23 +53,9 @@ function EditHotel() {
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setHotelDetail({
-            ...hotelDetail,
+        setRoomDetail({
+            ...roomDetail,
             [name]: value
-        })
-    }
-
-    Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
-    const geocode = (e) => {
-        setAddress(e.target.value);
-        Geocode.fromAddress(address).then((resp) => {
-            const lat = (resp.results[0].geometry.location.lat).toString();
-            const lot = (resp.results[0].geometry.location.lng).toString();
-            setHotelDetail({
-                ...hotelDetail,
-                lat: lat,
-                lot: lot
-            })
         })
     }
 
@@ -109,23 +90,21 @@ function EditHotel() {
     }
 
     const handleSubmit = async (e) => {
-        if (hotelDetail.name && hotelDetail.capacity && hotelDetail.lat && hotelDetail.lot && hotelDetail.description) {
+        if (roomDetail.name && roomDetail.price && roomDetail.description) {
             const sleep = m => new Promise(r => setTimeout(r, m));
             handleUpload();
             await sleep(3000);
             const imageString = urls.toString();
-            await Axios.put(`/hotel`, {
-                name: hotelDetail.name,
-                capacity: parseInt(hotelDetail.capacity),
-                description: hotelDetail.description,
-                lat: hotelDetail.lat,
-                lot: hotelDetail.lot,
+            await Axios.put(`/roomDetails`, {
+                id: slug.idRoom,
+                name: roomDetail.name,
+                price: roomDetail.price,
+                description: roomDetail.description,
                 image: imageString,
-                id: hotelDetail.id
-            }).then(() => {
-                alert("Hotel has Updated")
-            })
-            .catch((err) => {
+                hotel_id: slug.id
+            }).then((resp) => {
+                console.log(resp);
+            }).catch((err) => {
                 console.log(err);
             })
         } else {
@@ -135,7 +114,7 @@ function EditHotel() {
     }
 
     useEffect(() => {
-        getHotelDetail();
+        getRoomDetail();
     }, [])
 
     return (
@@ -157,7 +136,7 @@ function EditHotel() {
                                     id="name"
                                     autoComplete="given-name"
                                     className="mt-1 input input-sm input-bordered w-full"
-                                    value={hotelDetail?.name}
+                                    value={roomDetail?.name}
                                     onChange={handleInput}
                                 />
                             </dd>
@@ -171,7 +150,7 @@ function EditHotel() {
                                     id="description"
                                     rows={5}
                                     className="mt-1 textarea textarea-bordered w-full"
-                                    value={hotelDetail?.description}
+                                    value={roomDetail?.description}
                                     onChange={handleInput}
                                 />  
                             </dd>
@@ -212,20 +191,6 @@ function EditHotel() {
                                 </div>
                             </dd>
                         </div>
-                        <div className="bg-base-100 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-semibold">Location</dt>
-                            <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                                <input
-                                    type="text"
-                                    name="lokasi"
-                                    id="lokasi"
-                                    autoComplete="street-address"
-                                    className="mt-1 input input-sm input-bordered w-full"
-                                    value={address}
-                                    onChange={geocode}
-                                />
-                            </dd>
-                        </div>
                         <div className="bg-base-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt className="text-sm font-semibold">Capacity</dt>
                             <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">
@@ -234,7 +199,7 @@ function EditHotel() {
                                     name="capacity"
                                     id="capacity"
                                     className="mt-1 input input-sm input-bordered w-full max-w-lg"
-                                    value={hotelDetail?.capacity}
+                                    value={roomDetail?.price}
                                     onChange={handleInput}
                                 />
                             </dd>
@@ -246,4 +211,4 @@ function EditHotel() {
     )
 }
 
-export default EditHotel
+export default EditRoomHotel

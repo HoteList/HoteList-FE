@@ -1,30 +1,29 @@
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from 'react'
+import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { ImageContainer, Navbar } from '../components'
-import Geocode from "react-geocode";
-import { useDropzone } from 'react-dropzone';
-import { app } from '../firebase/firebase-config'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { app } from '../firebase/firebase-config';
 import imageCompression from 'browser-image-compression';
 import { Axios } from '../helper/axios';
+import { useParams } from 'react-router-dom';
 
-function AddHotel() {
+function AddRoomHotel() {
     const admin = useSelector((state) => state.admin.admins);
+    const slug = useParams();
     const initialState = {
         name: "",
-        capacity: 0,
+        price: "",
         description: "",
-        lat: "",
-        lot: "",
-        image: ""
+        image: "",
     }
-    const [hotel, setHotel] = useState(initialState);
+    const [room, setRoom] = useState(initialState);
     const [files, setFiles] = useState([]);
-    const urls = [];
     const compressionOption = {
 		maxWidthOrHeight: 1080,
 		useWebWorker: true,
 	};
+    const urls = [];
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/jpg,image/png,image/jpeg',
@@ -36,24 +35,11 @@ function AddHotel() {
         noDragEventsBubbling: true
     });
 
-    Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
-    const geocode = (e) => {
-        Geocode.fromAddress(e.target.value).then((resp) => {
-            const lat = (resp.results[0].geometry.location.lat).toString();
-            const lot = (resp.results[0].geometry.location.lng).toString();
-            setHotel({
-                ...hotel,
-                lat: lat,
-                lot: lot
-            })
-        })
-    }
-
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setHotel({
-            ...hotel,
+        setRoom({
+            ...room,
             [name]: value
         })
     }
@@ -85,22 +71,20 @@ function AddHotel() {
     }
 
     const handleSubmit = async (e) => {
-        if (hotel.name && hotel.capacity && hotel.lat && hotel.lot && hotel.description) {
+        if (room.name && room.description && room.price) {
             const sleep = m => new Promise(r => setTimeout(r, m));
             handleUpload();
             await sleep(3000);
             const imageString = urls.toString();
-            await Axios.post(`/hotel`, {
-                name: hotel.name,
-                capacity: parseInt(hotel.capacity),
-                description: hotel.description,
-                lat: hotel.lat,
-                lot: hotel.lot,
-                image: imageString
+            Axios.post(`/roomDetails`, {
+                name: room.name,
+                price: room.price,
+                description: room.description,
+                image: imageString,
+                hotel_id: slug.id
             }).then(() => {
-                alert("Hotel has inserted");
-            })
-            .catch((err) => {
+                alert('Room has added');
+            }).catch((err) => {
                 console.log(err);
             })
         } else {
@@ -116,7 +100,7 @@ function AddHotel() {
                 <div className="md:grid md:grid-cols-3">
                     <div className="md:col-span-1">
                         <div className="px-4 sm:px-0">
-                            <h3 className="text-lg font-semibold leading-6 text-base-100">Add Hotel</h3>
+                            <h3 className="text-lg font-semibold leading-6 text-base-100">Add Room Hotel</h3>
                         </div>
                     </div>
                     <div className='mt-5 md:mt-0 md:col-span-2 bg-base-100 shadow-md overflow-hidden rounded-lg'>
@@ -126,7 +110,7 @@ function AddHotel() {
                                     <div className="grid grid-cols-12 gap-6">
                                         <div className="col-span-12 sm:col-span-6">
                                             <label htmlFor="name" className="block text-sm font-semibold">
-                                                Nama Hotel
+                                                Nama Room Hotel
                                             </label>
                                             <input
                                                 type="text"
@@ -138,28 +122,15 @@ function AddHotel() {
                                             />
                                         </div>
                                         <div className="col-span-12 sm:col-span-6">
-                                            <label htmlFor="capacity" className="block text-sm font-semibold">
-                                                Kapasitas
+                                            <label htmlFor="price" className="block text-sm font-semibold">
+                                                Harga
                                             </label>
                                             <input
                                                 type="text"
-                                                name="capacity"
-                                                id="capacity"
+                                                name="price"
+                                                id="price"
                                                 className="mt-1 input input-sm input-bordered w-full max-w-lg"
                                                 onChange={handleInput}
-                                            />
-                                        </div>
-                                        <div className="col-span-12">
-                                            <label htmlFor="lokasi" className="block text-sm font-semibold">
-                                                Lokasi
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="lokasi"
-                                                id="lokasi"
-                                                autoComplete="street-address"
-                                                className="mt-1 input input-sm input-bordered w-full"
-                                                onChange={geocode}
                                             />
                                         </div>
                                         <div className="col-span-12">
@@ -176,7 +147,7 @@ function AddHotel() {
                                         </div>
                                         <div {...getRootProps({ className: 'dropzone' })} className="col-span-12">
                                             <label htmlFor="image" className="block text-sm font-semibold">
-                                                Foto Hotel
+                                                Foto Room Hotel
                                             </label>
                                             <div className='flex mt-1 justify-center px-6 pt-5 pb-6 border-2 border-base-content border-dashed rounded-md'>
                                                 <input {...getInputProps()} className="sr-only" multiple />
@@ -222,4 +193,4 @@ function AddHotel() {
     )
 }
 
-export default AddHotel
+export default AddRoomHotel
