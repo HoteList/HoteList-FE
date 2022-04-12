@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { Navbar } from '../components';
+import { Navbar, RoomList } from '../components';
 import { Axios } from '../helper/axios';
 import Geocode from "react-geocode";
 
@@ -10,6 +10,8 @@ function HotelDetail() {
     const slug = useParams();
     const [city, setCity] = useState();
     const [hotelDetail, setHotelDetail] = useState();
+    const [roomDetail, setRoomDetail] = useState();
+    
     const getHotelDetail = () => {
         Axios.get(`/hotel/${slug.id}`).then((resp) => {
             const images = resp.data.image.split(',');
@@ -24,9 +26,43 @@ function HotelDetail() {
             });
         })
     }
+
+    const getRoomDetail = () => {
+        Axios.get(`/roomDetails/hotel/${slug.id}`).then((resp) => {
+            const rooms = [];
+            resp.data.forEach((data) => {
+                const images = data.image.split(',');
+                rooms.push({
+                    id: data.id,
+                    name: data.name,
+                    price: data.price,
+                    description: data.description,
+                    image: images,
+                    hotel_id: data.hotel_id
+                })
+            })
+            setRoomDetail(rooms);
+        })
+    }
+
+    const deleteRoomDetail = (id) => {
+        Axios.delete(`roomDetails`, {
+            data: {
+                id: id
+            }
+        }).then(() => {
+            alert("Hotel has been deleted")
+        }).then(() => {
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err);
+        })
+        console.log(id);
+    }
     
     useEffect(() => {
         getHotelDetail();
+        getRoomDetail();
     }, [])
 
     Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
@@ -83,6 +119,15 @@ function HotelDetail() {
                         </div>
                     </dl>
                 </div>
+            </div>
+            <div className='mt-8 mx-10'>
+                <div className='flex justify-between'>
+                    <h3 className='text-lg font-semibold mb-2'>Room Details</h3>
+                    <Link to={`/listhotel/${slug.id}/room/add`}>
+                        <div className='btn'>Add Room</div>
+                    </Link>
+                </div>
+                <RoomList data={roomDetail} deleteRoomDetail={deleteRoomDetail} />
             </div>
         </div>
     )

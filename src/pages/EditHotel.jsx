@@ -139,7 +139,7 @@ function EditHotel() {
     }, [])
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen pb-4'>
             <Navbar image={admin.image} username={admin.username} />
             <div className='bg-base-100 mx-10 mt-4 shadow overflow-hidden sm:rounded-lg'>
                 <div className='p-4 sm:px-6 flex justify-between'>
