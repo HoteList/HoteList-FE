@@ -36,7 +36,7 @@ function AddHotel() {
         noDragEventsBubbling: true
     });
 
-    Geocode.setApiKey("AIzaSyAoHLzY8-KIEPSMWfQUk6JTFGgNGQcgu2s");
+    Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
     const geocode = (e) => {
         setHotel({
             ...hotel,
