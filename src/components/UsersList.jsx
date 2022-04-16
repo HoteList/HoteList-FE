@@ -1,6 +1,36 @@
 import React from 'react'
+import { useEffect, useState } from 'react'
+import Geocode from "react-geocode";
 
 function UserList({ user }) {
+
+    const [users, setUsers] = useState(user);
+
+    useEffect(() => {
+        for (let k = 0; k < user.length; k++) {
+            // console.log(user);
+            Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
+            Geocode.fromLatLng(user[k]?.lat, user[k]?.lot).then((resp) => {
+                // console.log(i)
+                for (let i = 0; i < resp.results[0].address_components.length; i++) {
+                    for (let j = 0; j < resp.results[0].address_components[i].types.length; j++) {
+                        switch (resp.results[0].address_components[i].types[j]) {
+                            case "administrative_area_level_2":
+                                setUsers(users[k].location = (resp.results[0].address_components[i].long_name));
+                                // console.log(hotels)
+                            break;
+                        }
+                    }
+                }
+            },
+            (error) => {
+                setUsers(users[k].location = "nan");
+                console.error(error);
+            })
+        }
+        console.log(user);
+    }, []);
+
     return (
         <div className='overflow-x-auto w-full'>
             <table className='table w-full'>
@@ -12,6 +42,7 @@ function UserList({ user }) {
                     </tr>
                 </thead>
                 <tbody>
+                    {/* {console.log(user)} */}
                     {user.map((item, index) => (
                         <tr key={index}>
                             <td>
@@ -31,10 +62,7 @@ function UserList({ user }) {
                                     }
                                     <div>
                                         <div className='font-bold'>{item.username}</div>
-                                        {item.lat.length !== 0 || item.lot.length !== 0 ? 
-                                            <div className='text-sm opacity-50'>{`Lat: ${item.lat}, Long: ${item.lot}`}</div>
-                                        : null
-                                        }
+                                        <div className='text-sm opacity-50'>{item.location}</div>
                                     </div>
                                 </div>
                             </td>

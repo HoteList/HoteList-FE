@@ -3,25 +3,27 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Chart, Navbar, UsersList } from '../components';
 import HotelList from '../components/HotelList';
-import { Axios } from '../helper/axios';
+import { Axios, AxiosLoad } from '../helper/axios';
 
 function Home() {
     const admin = useSelector((state) => state.admin.admins);
     const [user, setUser] = useState([]);
     const [hotel, setHotel] = useState([]);
 
-    const getUserData = async () => {
-        await Axios.get(`/user`).then((resp) => {
+    function getUserData() {
+        Axios.get(`/user`).then((resp) => {
             setUser(resp.data)
         })
     }
-    const getHotelData = async () => {
-        await Axios.get(`/hotel`).then((resp) => {
+
+    function getHotelData() {
+        Axios.get(`/hotel`).then((resp) => {
             setHotel(resp.data)
         })
     }
 
     useEffect(() => {
+        AxiosLoad();
         getUserData();
         getHotelData();
     }, [])

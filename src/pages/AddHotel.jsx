@@ -38,6 +38,12 @@ function AddHotel() {
 
     Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
     const geocode = (e) => {
+        setHotel({
+            ...hotel,
+            lat: null,
+            lot: null
+        })
+
         Geocode.fromAddress(e.target.value).then((resp) => {
             const lat = (resp.results[0].geometry.location.lat).toString();
             const lot = (resp.results[0].geometry.location.lng).toString();
@@ -103,6 +109,9 @@ function AddHotel() {
             .catch((err) => {
                 console.log(err);
             })
+        } else if (hotel.lat === null && hotel.lot === null) {
+            alert("Address Must Valid");
+            e.preventDefault();
         } else {
             alert("Field is required");
             e.preventDefault();

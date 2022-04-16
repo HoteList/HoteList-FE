@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Axios } from '../helper/axios'
+import Geocode from "react-geocode";
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 function HotelList({ hotel }) {
     const deleteHotel = (ids) => {
@@ -16,8 +19,38 @@ function HotelList({ hotel }) {
         })
         console.log(id);
     }
+
+    const [hotels, setHotels] = useState(hotel);
+
+    useEffect(() => {
+
+        for (let k = 0; k < hotel.length; k++) {
+            // console.log(hotel);
+            Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
+            Geocode.fromLatLng(hotel[k]?.lat, hotel[k]?.lot).then((resp) => {
+                // console.log(i)
+                for (let i = 0; i < resp.results[0].address_components.length; i++) {
+                    for (let j = 0; j < resp.results[0].address_components[i].types.length; j++) {
+                        switch (resp.results[0].address_components[i].types[j]) {
+                            case "administrative_area_level_2":
+                                setHotels(hotels[k].location = (resp.results[0].address_components[i].long_name));
+                                // console.log(hotels)
+                            break;
+                        }
+                    }
+                }
+            },
+            (error) => {
+                console.error(error);
+                // return 'null';
+            })
+        }
+        console.log(hotel)
+    }, [])
+
     return (
         <div className='overflow-x-auto w-full'>
+            {/* {console.log(hotels)} */}
             <table className='table w-full'>
                 <thead>
                     <tr>
@@ -35,7 +68,7 @@ function HotelList({ hotel }) {
                                 <div className='flex items-center space-x-3'>
                                     <div>
                                         <div className='font-bold'>{item.name}</div>
-                                        <div className='text-sm opacity-50'>Bandung</div>
+                                        <div className='text-sm opacity-50'>{item.location}</div>
                                     </div>
                                 </div>
                             </td>
