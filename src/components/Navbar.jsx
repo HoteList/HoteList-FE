@@ -12,7 +12,7 @@ function Navbar({ image, username }) {
         navigate('/login')
     }
     return (
-        <div className="sticky top-0 z-10 navbar shadow-sm shadow-brown-primary px-6 bg-white">
+        <div className="sticky top-0 z-50 navbar shadow-sm shadow-brown-primary px-6 bg-white">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabIndex="0" className="btn bg-transparent border-none hover:bg-transparent lg:hidden swap swap-rotate">

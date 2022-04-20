@@ -36,6 +36,7 @@ function UserList({ user }) {
             <table className='table w-full'>
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>Username</th>
                         <th>Full Name</th>
                         <th>Email</th>
@@ -45,6 +46,7 @@ function UserList({ user }) {
                     {/* {console.log(user)} */}
                     {user.map((item, index) => (
                         <tr key={index}>
+                            <th>{index+1}</th>
                             <td>
                                 <div className='flex items-center space-x-3'>
                                     {item.image ? (
