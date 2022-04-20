@@ -51,6 +51,7 @@ function HotelList({ hotel }) {
             <table className='table w-full'>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>No</th>
                         <th>Hotel Name</th>
                         <th>Description</th>
@@ -62,6 +63,7 @@ function HotelList({ hotel }) {
                 <tbody>
                     {hotel.map((item, index) => (
                         <tr key={index}>
+                            <td></td>
                             <td>{index+1}</td>
                             <td>
                                 <div className='flex items-center space-x-3'>
