@@ -117,6 +117,10 @@ function HotelDetail() {
                             <dt className="text-sm font-semibold">Capacity</dt>
                             <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">{hotelDetail?.capacity}</dd>
                         </div>
+                        <div className="bg-base-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-semibold">Location</dt>
+                            <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">{`${city} (${hotelDetail?.lat}, ${hotelDetail?.lot})`}</dd>
+                        </div>
                     </dl>
                 </div>
             </div>

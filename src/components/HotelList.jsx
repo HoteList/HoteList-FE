@@ -25,16 +25,13 @@ function HotelList({ hotel }) {
     useEffect(() => {
 
         for (let k = 0; k < hotel.length; k++) {
-            // console.log(hotel);
             Geocode.setApiKey(process.env.REACT_APP_MAPS_API);
             Geocode.fromLatLng(hotel[k]?.lat, hotel[k]?.lot).then((resp) => {
-                // console.log(i)
                 for (let i = 0; i < resp.results[0].address_components.length; i++) {
                     for (let j = 0; j < resp.results[0].address_components[i].types.length; j++) {
                         switch (resp.results[0].address_components[i].types[j]) {
                             case "administrative_area_level_2":
                                 setHotels(hotels[k].location = (resp.results[0].address_components[i].long_name));
-                                // console.log(hotels)
                             break;
                         }
                     }
@@ -54,6 +51,7 @@ function HotelList({ hotel }) {
             <table className='table w-full'>
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Hotel Name</th>
                         <th>Description</th>
                         <th>Capacity</th>
@@ -64,6 +62,7 @@ function HotelList({ hotel }) {
                 <tbody>
                     {hotel.map((item, index) => (
                         <tr key={index}>
+                            <td>{index+1}</td>
                             <td>
                                 <div className='flex items-center space-x-3'>
                                     <div>
